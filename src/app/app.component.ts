@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { from, of, Subscription } from 'rxjs';
+import { delay, map, mergeMap, switchMap } from 'rxjs/operators';
 import { PolicyService } from './policy.service';
 
 @Component({
@@ -13,7 +13,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   policies: any[] = [];
 
-  constructor(private policyService: PolicyService) { }
+  constructor(private policyService: PolicyService
+  ) { }
 
   ngOnInit(): void {
     this.subscription = this.policyService.getPolicies()
@@ -21,6 +22,21 @@ export class AppComponent implements OnInit, OnDestroy {
         console.log(data);
         this.policies = data;
       })
+    from([1, 2, 3])
+      .pipe(
+        map((val: number) => {
+          const newVal = val + 1;
+          return newVal;
+        }),
+        map(val => val - 1),
+        mergeMap(val => of(val)),
+        delay(1))
+      .subscribe({
+        next: (val: number) => console.log(val),
+        complete: () => console.log('complete'),
+        error: err => console.error(err)
+      });
+    console.log('test...');
   }
 
   ngOnDestroy(): void {
@@ -65,4 +81,5 @@ export class AppComponent implements OnInit, OnDestroy {
         this.policies = data as any[];
       });
   }
+
 }

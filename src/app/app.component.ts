@@ -37,6 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
         error: err => console.error(err)
       });
     console.log('test...');
+    this.test();
   }
 
   ngOnDestroy(): void {
@@ -67,6 +68,24 @@ export class AppComponent implements OnInit, OnDestroy {
         console.log(data);
         this.policies = data as any[];
       });
+  }
+
+  spread(...values: string[]): void {
+    const result = values; // array of string
+  }
+
+  noSpread(values: string[]): void {
+    const result = values; // array of string
+  }
+
+  test(): void {
+    this.spread('a', 'b');
+    this.spread(...['a', 'b']);
+    this.noSpread(['a', 'b']);
+    this.noSpread([...['a', 'b']]);
+    const obj = { a: 1, b: 2, c: 3 };
+    const clone = { ...obj };
+    console.log(obj, clone, 'are eqal:', obj === clone);
   }
 
   public createPolicy() {

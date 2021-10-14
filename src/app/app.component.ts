@@ -17,6 +17,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.subscription.unsubscribe();
     this.subscription = this.policyService.getPolicies()
       .subscribe((data: any[]) => {
         console.log(data);
@@ -45,6 +46,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public deletePolicy(policyId: any) {
+    this.subscription.unsubscribe();
     this.subscription = this.policyService.deletePolicy(policyId)
       .pipe(
         map((ret) => console.log("Policy deleted: ", ret)),
@@ -60,6 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
     let newPolicy: { id: number, amount: number, clientId: number, userId: number, description: string } =
       { ...this.policies[0] };
     newPolicy.description = 'Policy updated: ' + new Date().toLocaleTimeString();
+    this.subscription.unsubscribe();
     this.subscription = this.policyService.updatePolicy(newPolicy)
       .pipe(
         map((ret) => console.log("Policy updated: ", ret)),
@@ -91,6 +94,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public createPolicy() {
     let newPolicy: { id: number, amount: number, clientId: number, userId: number, description: string } =
       { id: this.policies.length + 1, amount: 1, clientId: 1, userId: 1, description: 'New policy created: ' + new Date().toLocaleTimeString() }
+    this.subscription.unsubscribe();
     this.subscription = this.policyService.createPolicy(newPolicy)
       .pipe(
         map((ret) => console.log("Policy created: ", ret)),
